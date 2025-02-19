@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+
+    <title>tool</title>
+    <style>
+        #jsonreceived {
+            background-color: #ddddff;
+            border: solid 1px black;
+        }
+        #jsonpayload, #urifield {
+            width: 100%;
+        }
+    </style>
+    <script>
+    function send() {
+    const method = document.getElementById("methodselector").value;
+    let uri = document.getElementById("urifield").value;
+    // hack for empty field
+    if (uri == "") {
+    uri = location.protocol + "//" + location.hostname + ":" + location.port;
+    }
+    let bodyText = document.getElementById("jsonpayload").value.trim();
+    if (bodyText == "") {
+    bodyText = "{}";
+    }
+    try {
+    const bodyData = JSON.parse(bodyText);
+    document.getElementById("jsonpayload").value = "";
+    sendRequest(method, uri, bodyData, (response, content) => responseHandler(response, content));
+    }catch(error) {
+    alert(error);
+    }
+    }
+</script>
+    <script>
+
+        (all our existing code is here…)
+
+        window.onload = init;
+    </script>
+</head>
+<body>
+<script>
+function responseHandler(response, content) {
+document.getElementById('jsonreceived').innerHTML = '<pre>' + JSON.stringify(content, null, 4) + '</pre>';
+}
+</script>
+<h3> HTTP method:</h3>
+
+<select id="methodselector">
+    <option>GET</option>
+    <option>POST</option>
+    <option>PUT</option>
+    <option>DELETE</option>
+</select>
+
+<h3>URI</h3>
+<input type='url' id='urifield'>
+
+<h3>JSON request body</h3>
+
+<textarea id='jsonpayload'> </textarea>
+
+<button id='sendbutton'>Send</button>
+
+<h3>Response</h3>
+<div id='jsonreceived'>
+    Response displayed here
+</div>
+
+</body>
+</html>
